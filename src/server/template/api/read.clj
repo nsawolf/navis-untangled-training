@@ -22,7 +22,7 @@
         items (->> (get @todo-db :items)
                    vals
                    (filter #(= list-id (:list %)))          ;; value of list field matches list id
-                   (sort-by :oridnal)
+                   (sort-by :ordinal)
                    (map #(select-keys % [:db/id :item/label :item/done?]))
                    vec)                                     ;; the thing to the client we want to return to as vector not as a list
         result (assoc list :list/items items)]
@@ -33,7 +33,7 @@
   (timbre/info "Incoming query on key " disp-key " with subquery " query " and params " params)
   ;(let [connection (udb/get-connection survey-database)])
   (case disp-key
-    :todo/list {:values (get-list (:id params))}
+    :todo/list {:value (get-list (:id params))}
     ;:logged-in? {:value @m/logged-in?}
     :hello-world {:value 42}
     :current-user {:value {:id 42 :name "Tony Kay"}}
