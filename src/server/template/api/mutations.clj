@@ -29,17 +29,16 @@
              (swap! db/todo-db update :items dissoc id))})
 
 
-
 (defmethod apimutate 'todo/update-item [env k params]
   {:action (fn []
              (let [item-id (:id params)
-                   path [:item/by-id item-id :item/label]
                    new-value (:value params)]
-               (swap! db/todo-db assoc-in path new-value)))})
+               (swap! db/todo-db update-in [:items item-id] assoc :item/label new-value)))})
 
-(defmethod apimutate 'todo/add-item [env k {:keys [list-id id] :as new-item}]
+(defmethod apimutate 'todo/add-item [env k {:keys [id] :as new-item}]
   {:action (fn []
-             (swap! db/todo-db assoc-in [:item/by-id id] new-item)
-             (swap! db/todo-db update-in [:list/by-id list-id :list/items]
-                    (fn [old-list]
-                      (conj old-list [:item/by-id id]))) )})
+             (println "new item: " new-item)
+             (println "item id: " id)
+             #_(let [item-id (:id id)]
+               (swap! db/todo-db assoc-in [:items item-id] new-item)
+               ))})
